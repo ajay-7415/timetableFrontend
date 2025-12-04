@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { authAPI } from '../services/api';
 import './Auth.css';
 
 function Signup({ onNavigateToLogin, onSignupSuccess }) {
@@ -28,11 +29,11 @@ function Signup({ onNavigateToLogin, onSignupSuccess }) {
         setIsLoading(true);
 
         try {
-            const { data } = await import('../services/api').then(module => module.authAPI.signup({
+            const { data } = await authAPI.signup({
                 name: formData.name,
                 email: formData.email,
                 password: formData.password
-            }));
+            });
 
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
