@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { timetableAPI, trackingAPI } from '../services/api';
+import { DailyViewSkeleton } from './Skeleton';
 import StatsCard from './StatsCard';
 import './DailyView.css';
 
@@ -49,7 +50,7 @@ const DailyView = () => {
     };
 
     if (loading) {
-        return <div className="loading">Loading...</div>;
+        return <DailyViewSkeleton />;
     }
 
     return (

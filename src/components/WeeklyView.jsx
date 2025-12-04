@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { trackingAPI } from '../services/api';
+import { WeeklyViewSkeleton } from './Skeleton';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import StatsCard from './StatsCard';
 import './WeeklyView.css';
@@ -49,7 +50,7 @@ const WeeklyView = () => {
     })) || [];
 
     if (loading) {
-        return <div className="loading">Loading...</div>;
+        return <WeeklyViewSkeleton />;
     }
 
     return (

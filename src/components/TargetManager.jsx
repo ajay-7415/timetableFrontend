@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { targetAPI } from '../services/api';
+import { SkeletonTarget } from './Skeleton';
 
 function TargetManager() {
     const [targets, setTargets] = useState([]);
@@ -151,7 +152,11 @@ function TargetManager() {
                 <div className="targets-list">
                     <h3 className="mb-md">Your Targets</h3>
                     {isLoading ? (
-                        <p>Loading targets...</p>
+                        <div className="grid gap-md">
+                            <SkeletonTarget />
+                            <SkeletonTarget />
+                            <SkeletonTarget />
+                        </div>
                     ) : targets.length === 0 ? (
                         <div className="glass-card text-center">
                             <p className="text-muted">No targets set yet. Create one to get started!</p>
