@@ -1,0 +1,144 @@
+.timetable-manager {
+    padding: var(--spacing-xl) 0;
+}
+
+.manager-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.entries-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.entry-card {
+    background: var(--color-bg-primary);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    border: 1px solid #e0e0e0;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+}
+
+.entry-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: #d0d0d0;
+}
+
+.entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+}
+
+.entry-title {
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.entry-meta {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+    margin-top: var(--spacing-xs);
+    flex-wrap: wrap;
+}
+
+.entry-time {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.entry-schedule {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+.entry-description {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    margin-top: var(--spacing-md);
+    line-height: 1.5;
+    padding-top: var(--spacing-md);
+    border-top: 1px solid #e0e0e0;
+}
+
+.entry-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.btn-icon {
+    background: var(--color-bg-secondary);
+    border: 1px solid #e0e0e0;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-icon:hover {
+    background: var(--color-bg-tertiary);
+    border-color: var(--color-accent-primary);
+    transform: scale(1.05);
+}
+
+/* Days Selector */
+.days-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-xs);
+}
+
+.day-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--color-bg-secondary);
+    border: 1px solid #e0e0e0;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    user-select: none;
+}
+
+.day-checkbox:hover {
+    background: var(--color-bg-tertiary);
+    border-color: var(--color-accent-primary);
+}
+
+.day-checkbox input[type="checkbox"] {
+    cursor: pointer;
+}
+
+.day-checkbox input[type="checkbox"]:checked+span {
+    color: var(--color-accent-primary);
+    font-weight: 600;
+}
+
+.day-checkbox span {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
