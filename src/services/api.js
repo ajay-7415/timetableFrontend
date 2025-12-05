@@ -52,4 +52,11 @@ export const trackingAPI = {
     getHistory: (timetableId) => api.get(`/tracking/history/${timetableId}`)
 };
 
+// Audio API
+export const audioAPI = {
+    getAll: () => api.get('/audio'),
+    create: (data) => api.post('/audio', data),
+    updateTitle: (id, title) => api.patch(`/audio/${id}`, { title })
+};
+
 export default api;
