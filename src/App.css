@@ -3,14 +3,16 @@
     display: flex;
     flex-direction: column;
     background: var(--color-bg-secondary);
+    animation: fadeIn 0.5s ease-out;
 }
 
-.app-header {
+. header {
     padding: var(--spacing-md) 0;
     border-bottom: 1px solid #e0e0e0;
     background: var(--color-bg-primary);
     z-index: 100;
     box-shadow: 0 1px 2px rgba(60, 64, 67, 0.1);
+    animation: slideInDown 0.4s ease-out;
 }
 
 .app-header .container {
@@ -28,6 +30,11 @@
     font-weight: 600;
     color: var(--color-text-primary);
     margin-bottom: 0.25rem;
+    transition: color var(--transition-fast);
+}
+
+.logo h1:hover {
+    color: var(--color-accent-primary);
 }
 
 .tagline {
@@ -40,6 +47,7 @@
 .user-profile {
     display: flex;
     align-items: center;
+    animation: fadeInRight 0.6s ease-out;
 }
 
 .user-greeting {
@@ -50,6 +58,12 @@
     border-radius: 20px;
     box-shadow: var(--shadow-sm);
     border: 1px solid #e0e0e0;
+    transition: all var(--transition-normal);
+}
+
+.user-greeting:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 /* Sidebar Layout */
@@ -67,6 +81,7 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    animation: slideInLeft 0.5s ease-out;
 }
 
 .sidebar-nav {
@@ -88,15 +103,30 @@
     font-weight: 500;
     font-size: 0.95rem;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all var(--transition-normal);
     text-align: left;
     font-family: inherit;
     width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar-tab::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background: var(--color-accent-primary);
+    transform: scaleY(0);
+    transition: transform var(--transition-normal);
 }
 
 .sidebar-tab:hover {
     background: var(--color-bg-tertiary);
     color: var(--color-text-primary);
+    transform: translateX(4px);
 }
 
 .sidebar-tab.active {
@@ -105,10 +135,19 @@
     font-weight: 600;
 }
 
+.sidebar-tab.active::before {
+    transform: scaleY(1);
+}
+
 .sidebar-tab .tab-icon {
     font-size: 1.25rem;
     width: 24px;
     text-align: center;
+    transition: transform var(--transition-fast);
+}
+
+.sidebar-tab:hover .tab-icon {
+    transform: scale(1.2);
 }
 
 .sidebar-tab .tab-label {
@@ -143,6 +182,7 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: var(--spacing-lg);
+    animation: fadeInUp 0.6s ease-out;
 }
 
 /* Target Manager Styles */
@@ -159,6 +199,10 @@
     position: relative;
 }
 
+.target-card:hover {
+    transform: translateY(-3px);
+}
+
 .target-card.completed {
     background: #f0fdf4;
     border-color: #bbf7d0 !important;
@@ -167,6 +211,7 @@
 .target-card.overdue {
     background: #fef2f2;
     border-color: #fecaca !important;
+    animation: pulse 2s infinite;
 }
 
 .target-card h4 {
@@ -182,11 +227,12 @@
 
 .btn-icon {
     opacity: 0.6;
-    transition: opacity var(--transition-fast);
+    transition: all var(--transition-fast);
 }
 
 .btn-icon:hover {
     opacity: 1;
+    transform: scale(1.1);
 }
 
 /* Responsive */
@@ -213,6 +259,10 @@
         padding: var(--spacing-sm);
         min-width: 80px;
         text-align: center;
+    }
+
+    .sidebar-tab:hover {
+        transform: translateY(-2px);
     }
 
     .sidebar-tab .tab-label {

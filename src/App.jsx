@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DailyView from './components/DailyView';
 import WeeklyView from './components/WeeklyView';
 import MonthlyView from './components/MonthlyView';
@@ -12,6 +12,18 @@ function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [authView, setAuthView] = useState('login'); // 'login' or 'signup'
     const [currentView, setCurrentView] = useState('daily');
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Check for existing auth on mount
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        const user = localStorage.getItem('user');
+
+        if (token && user) {
+            setIsAuthenticated(true);
+        }
+        setIsLoading(false);
+    }, []);
 
     // Auth handlers
     const handleLoginSuccess = () => {
@@ -29,6 +41,21 @@ function App() {
     const handleNavigateToLogin = () => {
         setAuthView('login');
     };
+
+    // Show loading while checking auth
+    if (isLoading) {
+        return (
+            <div className="loading-container" style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '100vh',
+                background: 'var(--color-bg-secondary)'
+            }}>
+                <div className="loading-spinner" />
+            </div>
+        );
+    }
 
     // If not authenticated, show auth pages
     if (!isAuthenticated) {
