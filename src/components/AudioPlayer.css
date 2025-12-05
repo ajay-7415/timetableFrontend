@@ -1,0 +1,328 @@
+/* Audio Player Container */
+.audio-player-container {
+    padding: var(--spacing-lg);
+}
+
+.audio-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--color-text-primary);
+}
+
+.modal-close {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    padding: 0.25rem;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all var(--transition-fast);
+}
+
+.modal-close:hover {
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    transform: rotate(90deg);
+}
+
+/* Info Box */
+.info-box {
+    background: #e8f0fe;
+    border: 1px solid #aecbfa;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    font-size: 0.9rem;
+    color: var(--color-text-primary);
+}
+
+.info-box ol {
+    margin: 0;
+    color: var(--color-text-secondary);
+}
+
+.info-box li {
+    margin-bottom: 0.25rem;
+}
+
+/* Current Player */
+.current-player {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: var(--spacing-xl);
+    border: none !important;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.current-player .player-header h3 {
+    color: white;
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.current-player .player-info h4 {
+    color: white;
+    font-size: 1.5rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.current-player .player-info small {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.audio-controls {
+    width: 100%;
+    height: 50px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.audio-controls::-webkit-media-controls-panel {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-md);
+}
+
+/* Audio List */
+.audio-list h3 {
+    font-size: 1.5rem;
+    color: var(--color-text-primary);
+}
+
+/* Empty State */
+.empty-state {
+    padding: var(--spacing-2xl);
+    text-align: center;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+.empty-state h3 {
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.empty-state p {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Audio Card */
+.audio-card {
+    padding: var(--spacing-lg);
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.audio-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transition: transform var(--transition-normal);
+}
+
+.audio-card:hover::before {
+    transform: scaleX(1);
+}
+
+.audio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.audio-card.playing {
+    border-color: var(--color-accent-primary) !important;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+}
+
+.audio-card.playing::before {
+    transform: scaleX(1);
+    animation: shimmer 2s linear infinite;
+}
+
+.audio-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.audio-icon {
+    font-size: 2.5rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-lg);
+    flex-shrink: 0;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.audio-card.playing .audio-icon {
+    animation: pulse 1s ease-in-out infinite, rotate 3s linear infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid var(--color-bg-tertiary);
+}
+
+.audio-card-footer small {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* Info Banner */
+.info-banner {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 1px solid #bbf7d0 !important;
+    padding: var(--spacing-lg);
+}
+
+.info-banner strong {
+    color: var(--color-success);
+    font-size: 1.1rem;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .audio-player-container {
+        padding: var(--spacing-md);
+    }
+
+    .audio-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .current-player {
+        padding: var(--spacing-lg);
+    }
+
+    .empty-state {
+        padding: var(--spacing-xl);
+    }
+
+    .empty-icon {
+        font-size: 3rem;
+    }
+
+    .audio-card-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .audio-icon {
+        margin: 0 auto;
+    }
+
+    .modal-content {
+        width: 95%;
+    }
+
+    .info-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* Animations */
+@keyframes shimmer {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+/* Loading State */
+.loading {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+}
+
+/* Smooth scroll */
+.modal-content {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-accent-primary) var(--color-bg-tertiary);
+}
+
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: var(--color-bg-tertiary);
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: var(--color-accent-primary);
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: #1557b0;
+}

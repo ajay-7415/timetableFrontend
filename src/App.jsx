@@ -4,6 +4,7 @@ import WeeklyView from './components/WeeklyView';
 import MonthlyView from './components/MonthlyView';
 import TimetableManager from './components/TimetableManager';
 import TargetManager from './components/TargetManager';
+import AudioPlayer from './components/AudioPlayer';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import './App.css';
@@ -84,6 +85,8 @@ function App() {
                 return <MonthlyView />;
             case 'targets':
                 return <TargetManager />;
+            case 'audio':
+                return <AudioPlayer />;
             case 'create':
                 return <TimetableManager />;
             case 'manage':
@@ -138,6 +141,13 @@ function App() {
                         >
                             <span className="tab-icon">🎯</span>
                             <span className="tab-label">Targets</span>
+                        </button>
+                        <button
+                            className={`sidebar-tab ${currentView === 'audio' ? 'active' : ''}`}
+                            onClick={() => setCurrentView('audio')}
+                        >
+                            <span className="tab-icon">🎵</span>
+                            <span className="tab-label">Audio Player</span>
                         </button>
 
                         <div className="sidebar-divider"></div>
