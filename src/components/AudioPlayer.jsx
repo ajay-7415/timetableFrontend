@@ -38,6 +38,44 @@ function AudioPlayer() {
             }
             return fileId;
         }
+        return null;
+    };
+
+    // Add new audio link
+    const handleAddAudio = (e) => {
+        e.preventDefault();
+
+        if (!newLink.trim()) {
+            alert('Please enter a valid link');
+            return;
+        }
+
+        const fileId = getGoogleDriveFileId(newLink);
+
+        if (!fileId) {
+            alert('Please enter a valid Google Drive link');
+            return;
+        }
+
+        const audioData = {
+            id: Date.now(),
+            originalLink: newLink,
+            fileId: fileId,
+            addedAt: new Date().toISOString(),
+            title: newTitle.trim() || `Audio ${audioLinks.length + 1}`
+        };
+
+        const updatedLinks = [...audioLinks, audioData];
+        setAudioLinks(updatedLinks);
+        localStorage.setItem('audioLinks', JSON.stringify(updatedLinks));
+
+        setNewLink('');
+        setNewTitle('');
+        setShowAddForm(false);
+    };
+
+    // Play audio
+    const handlePlayAudio = (audio) => {
         setCurrentlyPlaying(audio);
     };
 
