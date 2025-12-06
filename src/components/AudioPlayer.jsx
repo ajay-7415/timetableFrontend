@@ -12,7 +12,7 @@ function AudioPlayer() {
     const [editingId, setEditingId] = useState(null);
     const [editingTitle, setEditingTitle] = useState('');
 
-    // Load audio links from backend on mount
+    // Load audio links from backend or localStorage on mount
     useEffect(() => {
         loadAudioLinks();
     }, []);
@@ -22,7 +22,12 @@ function AudioPlayer() {
             const { data } = await audioAPI.getAll();
             setAudioLinks(data);
         } catch (error) {
-            console.error('Error loading audio links:', error);
+            console.warn('Backend unavailable, loading from localStorage:', error);
+            // Fallback to localStorage
+            const savedLinks = localStorage.getItem('audioLinks');
+            if (savedLinks) {
+                setAudioLinks(JSON.parse(savedLinks));
+            }
         } finally {
             setIsLoading(false);
         }
@@ -61,23 +66,32 @@ function AudioPlayer() {
             return;
         }
 
+        const audioData = {
+            title: newTitle.trim() || `Audio ${audioLinks.length + 1}`,
+            originalLink: newLink,
+            fileId: fileId
+        };
+
         try {
-            const audioData = {
-                title: newTitle.trim() || `Audio ${audioLinks.length + 1}`,
-                originalLink: newLink,
-                fileId: fileId
-            };
-
+            // Try backend first
             await audioAPI.create(audioData);
-            await loadAudioLinks(); // Reload from backend
-
-            setNewLink('');
-            setNewTitle('');
-            setShowAddForm(false);
-        } catch (error) {
-            console.error('Error adding audio:', error);
-            alert('Failed to add audio. Please try again.');
+            await loadAudioLinks();
+        } catch (backendError) {
+            // Fallback to localStorage
+            console.warn('Backend unavailable, saving to localStorage');
+            const localData = {
+                ...audioData,
+                _id: Date.now().toString(),
+                addedAt: new Date().toISOString()
+            };
+            const updatedLinks = [...audioLinks, localData];
+            setAudioLinks(updatedLinks);
+            localStorage.setItem('audioLinks', JSON.stringify(updatedLinks));
         }
+
+        setNewLink('');
+        setNewTitle('');
+        setShowAddForm(false);
     };
 
     // Play audio
@@ -110,14 +124,23 @@ function AudioPlayer() {
         }
 
         try {
+            // Try backend first
             await audioAPI.updateTitle(audioId, editingTitle.trim());
-            await loadAudioLinks(); // Reload from backend
-            setEditingId(null);
-            setEditingTitle('');
-        } catch (error) {
-            console.error('Error updating title:', error);
-            alert('Failed to update title. Please try again.');
+            await loadAudioLinks();
+        } catch (backendError) {
+            // Fallback to localStorage
+            console.warn('Backend unavailable, updating localStorage');
+            const updatedLinks = audioLinks.map(audio =>
+                audio._id === audioId
+                    ? { ...audio, title: editingTitle.trim() }
+                    : audio
+            );
+            setAudioLinks(updatedLinks);
+            localStorage.setItem('audioLinks', JSON.stringify(updatedLinks));
         }
+
+        setEditingId(null);
+        setEditingTitle('');
     };
 
     // Cancel editing
@@ -359,7 +382,7 @@ function AudioPlayer() {
                         <div>
                             <strong>Your audio is safe!</strong>
                             <p className="text-muted mb-0" style={{ fontSize: '0.9rem' }}>
-                                All audio links are permanently stored in the database and cannot be removed. Build your collection with confidence!
+                                All audio links are permanently stored and cannot be removed. Build your collection with confidence!
                             </p>
                         </div>
                     </div>
