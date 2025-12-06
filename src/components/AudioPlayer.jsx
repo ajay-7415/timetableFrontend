@@ -263,7 +263,7 @@ function AudioPlayer() {
                         <iframe
                             src={`https://drive.google.com/file/d/${currentlyPlaying.fileId}/preview`}
                             width="100%"
-                            height="80"
+                            height="150"
                             allow="autoplay"
                             className="audio-iframe"
                             title={currentlyPlaying.title}
