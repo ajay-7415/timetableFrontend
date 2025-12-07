@@ -13,7 +13,7 @@ const DailyView = () => {
         loadDailyData();
     }, [date]);
 
-    // Auto-miss tasks that have passed their end time
+    // Auto-miss tasks that have passed their end time (works even if user was offline)
     useEffect(() => {
         const autoMarkMissed = async () => {
             if (!stats?.tasks) return;
@@ -25,19 +25,32 @@ const DailyView = () => {
             // Only auto-miss for today's tasks
             if (date !== today) return;
 
+            let markedCount = 0;
             for (const task of stats.tasks) {
                 const status = getTaskStatus(task._id);
 
                 // If task end time has passed and it's not marked as completed or missed
+                // This works retroactively - if you were offline when end time passed, it marks now
                 if (task.end_time < currentTime && !status) {
-                    console.log(`⏰ Auto-marking as missed: ${task.title}`);
-                    await markTask(task._id, 'missed');
+                    console.log(`⏰ Auto-marking as missed: ${task.title} (ended at ${task.end_time})`);
+                    try {
+                        await markTask(task._id, 'missed');
+                        markedCount++;
+                    } catch (error) {
+                        console.error('Failed to auto-mark:', error);
+                    }
                 }
+            }
+
+            if (markedCount > 0) {
+                console.log(`✅ Auto-marked ${markedCount} task(s) as missed`);
             }
         };
 
-        // Check immediately and then every minute
+        // Check immediately when component loads or stats update (catches offline period)
         autoMarkMissed();
+
+        // Also check every minute for real-time updates
         const interval = setInterval(autoMarkMissed, 60000); // Check every minute
 
         return () => clearInterval(interval);
