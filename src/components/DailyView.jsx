@@ -25,36 +25,48 @@ const DailyView = () => {
             // Only auto-miss for today's tasks
             if (date !== today) return;
 
-            let markedCount = 0;
+            const tasksToMark = [];
             for (const task of stats.tasks) {
                 const status = getTaskStatus(task._id);
 
                 // If task end time has passed and it's not marked as completed or missed
-                // This works retroactively - if you were offline when end time passed, it marks now
                 if (task.end_time < currentTime && !status) {
-                    console.log(`⏰ Auto-marking as missed: ${task.title} (ended at ${task.end_time})`);
-                    try {
-                        await markTask(task._id, 'missed');
-                        markedCount++;
-                    } catch (error) {
-                        console.error('Failed to auto-mark:', error);
-                    }
+                    tasksToMark.push(task);
                 }
             }
 
-            if (markedCount > 0) {
-                console.log(`✅ Auto-marked ${markedCount} task(s) as missed`);
+            // Only proceed if there are tasks to mark
+            if (tasksToMark.length === 0) return;
+
+            console.log(`⏰ Auto-marking ${tasksToMark.length} task(s) as missed`);
+
+            // Mark all tasks without reloading after each one
+            for (const task of tasksToMark) {
+                try {
+                    await trackingAPI.mark({
+                        timetable_id: task._id,
+                        completion_date: date,
+                        status: 'missed'
+                    });
+                    console.log(`  ✓ ${task.title} (ended at ${task.end_time})`);
+                } catch (error) {
+                    console.error(`  ✗ Failed to mark ${task.title}:`, error);
+                }
             }
+
+            // Reload data only once after all tasks are marked
+            console.log(`✅ Reloading data...`);
+            loadDailyData();
         };
 
-        // Check immediately when component loads or stats update (catches offline period)
+        // Check immediately when component loads
         autoMarkMissed();
 
         // Also check every minute for real-time updates
-        const interval = setInterval(autoMarkMissed, 60000); // Check every minute
+        const interval = setInterval(autoMarkMissed, 60000);
 
         return () => clearInterval(interval);
-    }, [stats, date]);
+    }, [date]); // Only depend on date, not stats - prevents infinite loop
 
     const loadDailyData = async () => {
         setLoading(true);
