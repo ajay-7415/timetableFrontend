@@ -12,37 +12,59 @@ function AudioPlayer() {
     const [editingId, setEditingId] = useState(null);
     const [editingTitle, setEditingTitle] = useState('');
 
-    // Load audio links from backend or localStorage on mount
+    // Load audio links from backend and sync localStorage if needed
     useEffect(() => {
         loadAudioLinks();
     }, []);
 
     const loadAudioLinks = async () => {
         try {
+            console.log('🎵 Loading from backend...');
             const { data } = await audioAPI.getAll();
+
+            // If backend empty but localStorage has data, sync it
+            if (data.length === 0) {
+                const saved = localStorage.getItem('audioLinks');
+                if (saved) {
+                    const localData = JSON.parse(saved);
+                    console.log('📦 Syncing', localData.length, 'items from localStorage to backend');
+
+                    for (const audio of localData) {
+                        await audioAPI.create({
+                            title: audio.title,
+                            originalLink: audio.originalLink,
+                            fileId: audio.fileId
+                        });
+                    }
+
+                    const { data: synced } = await audioAPI.getAll();
+                    setAudioLinks(synced);
+                    localStorage.removeItem('audioLinks');
+                    console.log('✅ Synced complete');
+                    setIsLoading(false);
+                    return;
+                }
+            }
+
             setAudioLinks(data);
+            console.log('✅ Loaded', data.length, 'from backend');
         } catch (error) {
-            console.warn('Backend unavailable, loading from localStorage:', error);
-            // Fallback to localStorage
-            const savedLinks = localStorage.getItem('audioLinks');
-            if (savedLinks) {
-                setAudioLinks(JSON.parse(savedLinks));
+            console.warn('⚠️ Backend failed, using localStorage');
+            const saved = localStorage.getItem('audioLinks');
+            if (saved) {
+                setAudioLinks(JSON.parse(saved));
             }
         } finally {
             setIsLoading(false);
         }
     };
 
-    // Convert Google Drive link to embeddable format
     const getGoogleDriveFileId = (link) => {
         if (link.includes('drive.google.com')) {
             let fileId = '';
-            // Format: https://drive.google.com/file/d/FILE_ID/view
             if (link.includes('/file/d/')) {
                 fileId = link.split('/file/d/')[1].split('/')[0];
-            }
-            // Format: https://drive.google.com/open?id=FILE_ID
-            else if (link.includes('id=')) {
+            } else if (link.includes('id=')) {
                 fileId = link.split('id=')[1].split('&')[0];
             }
             return fileId;
@@ -50,7 +72,6 @@ function AudioPlayer() {
         return null;
     };
 
-    // Add new audio link
     const handleAddAudio = async (e) => {
         e.preventDefault();
 
@@ -60,7 +81,6 @@ function AudioPlayer() {
         }
 
         const fileId = getGoogleDriveFileId(newLink);
-
         if (!fileId) {
             alert('Please enter a valid Google Drive link');
             return;
@@ -69,24 +89,21 @@ function AudioPlayer() {
         const audioData = {
             title: newTitle.trim() || `Audio ${audioLinks.length + 1}`,
             originalLink: newLink,
-            fileId: fileId
+            fileId
         };
 
         try {
-            // Try backend first
             await audioAPI.create(audioData);
             await loadAudioLinks();
-        } catch (backendError) {
-            // Fallback to localStorage
-            console.warn('Backend unavailable, saving to localStorage');
+        } catch (error) {
+            console.warn('Backend failed, using localStorage');
             const localData = {
                 ...audioData,
                 _id: Date.now().toString(),
                 addedAt: new Date().toISOString()
             };
-            const updatedLinks = [...audioLinks, localData];
-            setAudioLinks(updatedLinks);
-            localStorage.setItem('audioLinks', JSON.stringify(updatedLinks));
+            setAudioLinks([...audioLinks, localData]);
+            localStorage.setItem('audioLinks', JSON.stringify([...audioLinks, localData]));
         }
 
         setNewLink('');
@@ -94,12 +111,10 @@ function AudioPlayer() {
         setShowAddForm(false);
     };
 
-    // Play audio
     const handlePlayAudio = (audio) => {
         setCurrentlyPlaying(audio);
     };
 
-    // Format date
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
@@ -110,13 +125,11 @@ function AudioPlayer() {
         });
     };
 
-    // Start editing title
     const handleStartEdit = (audio) => {
         setEditingId(audio._id);
         setEditingTitle(audio.title);
     };
 
-    // Save edited title
     const handleSaveTitle = async (audioId) => {
         if (!editingTitle.trim()) {
             alert('Title cannot be empty');
@@ -124,26 +137,20 @@ function AudioPlayer() {
         }
 
         try {
-            // Try backend first
             await audioAPI.updateTitle(audioId, editingTitle.trim());
             await loadAudioLinks();
-        } catch (backendError) {
-            // Fallback to localStorage
-            console.warn('Backend unavailable, updating localStorage');
-            const updatedLinks = audioLinks.map(audio =>
-                audio._id === audioId
-                    ? { ...audio, title: editingTitle.trim() }
-                    : audio
+        } catch (error) {
+            const updated = audioLinks.map(a =>
+                a._id === audioId ? { ...a, title: editingTitle.trim() } : a
             );
-            setAudioLinks(updatedLinks);
-            localStorage.setItem('audioLinks', JSON.stringify(updatedLinks));
+            setAudioLinks(updated);
+            localStorage.setItem('audioLinks', JSON.stringify(updated));
         }
 
         setEditingId(null);
         setEditingTitle('');
     };
 
-    // Cancel editing
     const handleCancelEdit = () => {
         setEditingId(null);
         setEditingTitle('');
@@ -159,7 +166,6 @@ function AudioPlayer() {
 
     return (
         <div className="audio-player-container animate-fadeIn">
-            {/* Header */}
             <div className="audio-header mb-lg">
                 <div className="flex-between">
                     <div>
@@ -168,27 +174,18 @@ function AudioPlayer() {
                             Add and listen to your favorite audio from Google Drive
                         </p>
                     </div>
-                    <button
-                        className="btn btn-primary animate-popIn"
-                        onClick={() => setShowAddForm(true)}
-                    >
+                    <button className="btn btn-primary animate-popIn" onClick={() => setShowAddForm(true)}>
                         ➕ Add Audio
                     </button>
                 </div>
             </div>
 
-            {/* Add Audio Form Modal */}
             {showAddForm && (
                 <div className="modal-overlay animate-fadeIn" onClick={() => setShowAddForm(false)}>
                     <div className="modal-content glass-card animate-popIn" onClick={(e) => e.stopPropagation()}>
                         <div className="modal-header mb-md">
                             <h3>Add New Audio</h3>
-                            <button
-                                className="btn-icon modal-close"
-                                onClick={() => setShowAddForm(false)}
-                            >
-                                ✕
-                            </button>
+                            <button className="btn-icon modal-close" onClick={() => setShowAddForm(false)}>✕</button>
                         </div>
 
                         <form onSubmit={handleAddAudio}>
@@ -222,16 +219,8 @@ function AudioPlayer() {
                             </div>
 
                             <div className="flex gap-sm">
-                                <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>
-                                    ✓ Add Audio
-                                </button>
-                                <button
-                                    type="button"
-                                    className="btn btn-secondary"
-                                    onClick={() => setShowAddForm(false)}
-                                >
-                                    Cancel
-                                </button>
+                                <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>✓ Add Audio</button>
+                                <button type="button" className="btn btn-secondary" onClick={() => setShowAddForm(false)}>Cancel</button>
                             </div>
                         </form>
 
@@ -248,7 +237,6 @@ function AudioPlayer() {
                 </div>
             )}
 
-            {/* Current Playing Audio */}
             {currentlyPlaying && (
                 <div className="current-player glass-card mb-lg animate-slideInDown">
                     <div className="player-header mb-md">
@@ -258,12 +246,11 @@ function AudioPlayer() {
                         <h4>{currentlyPlaying.title}</h4>
                         <small className="text-muted">Added on {formatDate(currentlyPlaying.addedAt)}</small>
                     </div>
-                    {/* Google Drive Embed Player */}
                     <div className="iframe-player-container">
                         <iframe
                             src={`https://drive.google.com/file/d/${currentlyPlaying.fileId}/preview`}
                             width="100%"
-                            height="150"
+                            height="80"
                             allow="autoplay"
                             className="audio-iframe"
                             title={currentlyPlaying.title}
@@ -272,7 +259,6 @@ function AudioPlayer() {
                 </div>
             )}
 
-            {/* Audio List */}
             <div className="audio-list">
                 <h3 className="mb-md">Your Audio Collection ({audioLinks.length})</h3>
 
@@ -283,10 +269,7 @@ function AudioPlayer() {
                         <p className="text-muted mb-md">
                             Start building your audio library by adding your first audio file from Google Drive
                         </p>
-                        <button
-                            className="btn btn-primary"
-                            onClick={() => setShowAddForm(true)}
-                        >
+                        <button className="btn btn-primary" onClick={() => setShowAddForm(true)}>
                             ➕ Add Your First Audio
                         </button>
                     </div>
@@ -374,7 +357,6 @@ function AudioPlayer() {
                 )}
             </div>
 
-            {/* Info Section */}
             {audioLinks.length > 0 && (
                 <div className="info-banner glass-card mt-lg animate-fadeInUp">
                     <div className="flex gap-md" style={{ alignItems: 'center' }}>
@@ -382,7 +364,7 @@ function AudioPlayer() {
                         <div>
                             <strong>Your audio is safe!</strong>
                             <p className="text-muted mb-0" style={{ fontSize: '0.9rem' }}>
-                                All audio links are permanently stored and cannot be removed. Build your collection with confidence!
+                                All audio links are permanently stored in the database and cannot be removed!
                             </p>
                         </div>
                     </div>
