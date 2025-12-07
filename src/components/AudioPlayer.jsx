@@ -187,9 +187,42 @@ function AudioPlayer() {
                             Add and listen to your favorite audio from Google Drive
                         </p>
                     </div>
-                    <button className="btn btn-primary animate-popIn" onClick={() => setShowAddForm(true)}>
-                        ➕ Add Audio
-                    </button>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        {localStorage.getItem('audioLinks') && (
+                            <button
+                                className="btn btn-secondary animate-popIn"
+                                onClick={async () => {
+                                    const saved = localStorage.getItem('audioLinks');
+                                    if (saved) {
+                                        const localData = JSON.parse(saved);
+                                        console.log('🔄 Manual sync:', localData.length, 'items');
+                                        setIsLoading(true);
+
+                                        for (const audio of localData) {
+                                            try {
+                                                await audioAPI.create({
+                                                    title: audio.title,
+                                                    originalLink: audio.originalLink,
+                                                    fileId: audio.fileId
+                                                });
+                                            } catch (err) {
+                                                console.error('Sync error:', err);
+                                            }
+                                        }
+
+                                        await loadAudioLinks();
+                                        localStorage.removeItem('audioLinks');
+                                        alert('✅ Synced ' + localData.length + ' items to backend!');
+                                    }
+                                }}
+                            >
+                                🔄 Sync to Backend
+                            </button>
+                        )}
+                        <button className="btn btn-primary animate-popIn" onClick={() => setShowAddForm(true)}>
+                            ➕ Add Audio
+                        </button>
+                    </div>
                 </div>
             </div>
 

@@ -13,6 +13,36 @@ const DailyView = () => {
         loadDailyData();
     }, [date]);
 
+    // Auto-miss tasks that have passed their end time
+    useEffect(() => {
+        const autoMarkMissed = async () => {
+            if (!stats?.tasks) return;
+
+            const now = new Date();
+            const currentTime = now.toTimeString().slice(0, 5); // HH:MM format
+            const today = new Date().toISOString().split('T')[0];
+
+            // Only auto-miss for today's tasks
+            if (date !== today) return;
+
+            for (const task of stats.tasks) {
+                const status = getTaskStatus(task._id);
+
+                // If task end time has passed and it's not marked as completed or missed
+                if (task.end_time < currentTime && !status) {
+                    console.log(`⏰ Auto-marking as missed: ${task.title}`);
+                    await markTask(task._id, 'missed');
+                }
+            }
+        };
+
+        // Check immediately and then every minute
+        autoMarkMissed();
+        const interval = setInterval(autoMarkMissed, 60000); // Check every minute
+
+        return () => clearInterval(interval);
+    }, [stats, date]);
+
     const loadDailyData = async () => {
         setLoading(true);
         try {
