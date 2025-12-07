@@ -20,7 +20,11 @@ function AudioPlayer() {
     const loadAudioLinks = async () => {
         try {
             console.log('🎵 Loading from backend...');
+            console.log('Token:', localStorage.getItem('token') ? 'Present' : 'MISSING');
+
             const { data } = await audioAPI.getAll();
+            console.log('📥 Backend response:', data);
+            console.log('📊 Number of items:', data.length);
 
             // If backend empty but localStorage has data, sync it
             if (data.length === 0) {
@@ -47,12 +51,21 @@ function AudioPlayer() {
             }
 
             setAudioLinks(data);
-            console.log('✅ Loaded', data.length, 'from backend');
+            console.log('✅ Successfully loaded', data.length, 'items from backend');
         } catch (error) {
-            console.warn('⚠️ Backend failed, using localStorage');
+            console.error('❌ Backend error details:');
+            console.error('Status:', error.response?.status);
+            console.error('Message:', error.message);
+            console.error('Full error:', error);
+
+            console.warn('⚠️ Falling back to localStorage');
             const saved = localStorage.getItem('audioLinks');
             if (saved) {
-                setAudioLinks(JSON.parse(saved));
+                const localData = JSON.parse(saved);
+                setAudioLinks(localData);
+                console.log('📦 Loaded', localData.length, 'items from localStorage');
+            } else {
+                console.log('❌ No localStorage data either');
             }
         } finally {
             setIsLoading(false);
