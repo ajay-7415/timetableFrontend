@@ -107,6 +107,9 @@ const DailyView = () => {
         setLoading(true);
         try {
             const response = await trackingAPI.getDaily(date);
+            console.log('📊 Daily Data Response:', response.data);
+            console.log('📋 Tasks:', response.data.tasks?.length || 0);
+            console.log('✅ Completions:', response.data.completions);
             setStats(response.data);
         } catch (error) {
             console.error('Error loading daily data:', error);
@@ -119,6 +122,8 @@ const DailyView = () => {
     const refreshDailyData = async () => {
         try {
             const response = await trackingAPI.getDaily(date);
+            console.log('🔄 Refresh Data:', response.data);
+            console.log('🔄 Completions:', response.data.completions);
             setStats(response.data);
         } catch (error) {
             console.error('Error refreshing daily data:', error);
@@ -149,8 +154,28 @@ const DailyView = () => {
     };
 
     const getTaskStatus = (taskId) => {
-        if (!stats?.completions) return null;
-        return stats.completions.find(c => c.timetable_id === taskId);
+        console.log(`🔍 Checking status for task ${taskId}`);
+        console.log('   Available completions:', stats?.completions);
+
+        if (!stats?.completions) {
+            console.log('   ❌ No completions array');
+            return null;
+        }
+
+        console.log('   Looking for timetable_id:', taskId);
+        const completion = stats.completions.find(c => {
+            console.log('   Comparing with completion:', c);
+            // Handle both populated (object) and non-populated (string) timetable_id
+            const completionTaskId = typeof c.timetable_id === 'object'
+                ? c.timetable_id._id
+                : c.timetable_id;
+            console.log('   Extracted ID:', completionTaskId);
+            return completionTaskId.toString() === taskId.toString();
+        });
+
+
+        console.log('   Result:', completion ? `Found: ${completion.status}` : 'Not found');
+        return completion;
     };
 
     if (loading) {
