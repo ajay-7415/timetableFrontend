@@ -47,6 +47,7 @@
 .user-profile {
     display: flex;
     align-items: center;
+    gap: 1rem;
     animation: fadeInRight 0.6s ease-out;
 }
 
@@ -64,6 +65,29 @@
 .user-greeting:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
+}
+
+.trial-badge {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #78350f;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(251, 191, 36, 0.3);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
 }
 
 /* Sidebar Layout */

@@ -59,4 +59,12 @@ export const audioAPI = {
     updateTitle: (id, title) => api.patch(`/audio/${id}`, { title })
 };
 
+// Subscription API
+export const subscriptionAPI = {
+    getStatus: () => api.get('/subscription/status'),
+    createOrder: () => api.post('/subscription/create-order'),
+    verifyPayment: (data) => api.post('/subscription/verify-payment', data),
+    cancelSubscription: () => api.post('/subscription/cancel')
+};
+
 export default api;

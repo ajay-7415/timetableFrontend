@@ -5,8 +5,10 @@ import MonthlyView from './components/MonthlyView';
 import TimetableManager from './components/TimetableManager';
 import TargetManager from './components/TargetManager';
 import AudioPlayer from './components/AudioPlayer';
+import SubscriptionManager from './components/SubscriptionManager';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import { subscriptionAPI } from './services/api';
 import './App.css';
 
 function App() {
@@ -14,6 +16,7 @@ function App() {
     const [authView, setAuthView] = useState('login'); // 'login' or 'signup'
     const [currentView, setCurrentView] = useState('daily');
     const [isLoading, setIsLoading] = useState(true);
+    const [subscriptionData, setSubscriptionData] = useState(null);
 
     // Check for existing auth on mount
     useEffect(() => {
@@ -25,6 +28,22 @@ function App() {
         }
         setIsLoading(false);
     }, []);
+
+    // Fetch subscription status when authenticated
+    useEffect(() => {
+        if (isAuthenticated) {
+            fetchSubscriptionStatus();
+        }
+    }, [isAuthenticated]);
+
+    const fetchSubscriptionStatus = async () => {
+        try {
+            const response = await subscriptionAPI.getStatus();
+            setSubscriptionData(response.data);
+        } catch (err) {
+            console.error('Failed to fetch subscription status:', err);
+        }
+    };
 
     // Auth handlers
     const handleLoginSuccess = () => {
@@ -87,6 +106,8 @@ function App() {
                 return <TargetManager />;
             case 'audio':
                 return <AudioPlayer />;
+            case 'subscription':
+                return <SubscriptionManager />;
             case 'create':
                 return <TimetableManager />;
             case 'manage':
@@ -106,6 +127,11 @@ function App() {
                     </div>
                     <div className="user-profile">
                         <span className="user-greeting">Hello, {JSON.parse(localStorage.getItem('user'))?.name || 'User'}</span>
+                        {subscriptionData?.trial?.isTrialActive && subscriptionData?.trial?.daysRemaining > 0 && (
+                            <span className="trial-badge">
+                                🆓 Trial: {subscriptionData.trial.daysRemaining} days left
+                            </span>
+                        )}
                     </div>
                 </div>
             </header>
@@ -148,6 +174,13 @@ function App() {
                         >
                             <span className="tab-icon">🎵</span>
                             <span className="tab-label">Audio Player</span>
+                        </button>
+                        <button
+                            className={`sidebar-tab ${currentView === 'subscription' ? 'active' : ''}`}
+                            onClick={() => setCurrentView('subscription')}
+                        >
+                            <span className="tab-icon">💎</span>
+                            <span className="tab-label">Subscription</span>
                         </button>
 
                         <div className="sidebar-divider"></div>

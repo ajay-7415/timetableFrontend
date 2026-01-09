@@ -1,0 +1,401 @@
+.subscription-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.subscription-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.subscription-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-primary);
+}
+
+.subscription-header p {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+}
+
+/* Error Banner */
+.error-banner {
+    background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);
+}
+
+.error-banner button {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.error-banner button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Status Card */
+.status-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 2px solid transparent;
+}
+
+.status-card.trial {
+    border-color: #fbbf24;
+    background: linear-gradient(135deg, #fef3c7 0%, #fff 100%);
+}
+
+.status-card.active {
+    border-color: #10b981;
+    background: linear-gradient(135deg, #d1fae5 0%, #fff 100%);
+}
+
+.status-card.inactive,
+.status-card.cancelled {
+    border-color: #ef4444;
+    background: linear-gradient(135deg, #fee2e2 0%, #fff 100%);
+}
+
+.status-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.status-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.status-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.status-badge.trial {
+    background: #fbbf24;
+    color: #78350f;
+}
+
+.status-badge.active {
+    background: #10b981;
+    color: white;
+}
+
+.status-badge.inactive,
+.status-badge.cancelled {
+    background: #ef4444;
+    color: white;
+}
+
+/* Trial Info */
+.trial-info {
+    text-align: center;
+}
+
+.trial-countdown {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.countdown-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 16px rgba(251, 191, 36, 0.3);
+}
+
+.days-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+}
+
+.days-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+}
+
+.trial-message {
+    font-size: 1.1rem;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.trial-end-date {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+/* Active/Inactive Info */
+.success-message,
+.warning-message {
+    font-size: 1.1rem;
+    text-align: center;
+    padding: 1rem;
+}
+
+.success-message {
+    color: #059669;
+}
+
+.warning-message {
+    color: #dc2626;
+}
+
+/* Features Card */
+.features-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.features-card h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--color-text-primary);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.feature-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.feature-content h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--color-text-primary);
+}
+
+.feature-content p {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+/* Pricing Card */
+.pricing-card {
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 24px rgba(79, 70, 229, 0.3);
+    color: white;
+}
+
+.pricing-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.pricing-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.currency {
+    font-size: 1.5rem;
+    opacity: 0.9;
+}
+
+.amount {
+    font-size: 3.5rem;
+    font-weight: 700;
+}
+
+.period {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.pricing-features {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0;
+}
+
+.pricing-features li {
+    padding: 0.75rem 0;
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.pricing-features li:last-child {
+    border-bottom: none;
+}
+
+/* Buttons */
+.subscribe-btn,
+.cancel-btn {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.subscribe-btn {
+    background: white;
+    color: #4f46e5;
+}
+
+.subscribe-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.3);
+}
+
+.subscribe-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.cancel-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid white;
+}
+
+.cancel-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.btn-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(79, 70, 229, 0.3);
+    border-top-color: #4f46e5;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Info Section */
+.info-section {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.info-section h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--color-text-primary);
+}
+
+.info-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.info-section li {
+    padding: 0.5rem 0;
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+}
+
+.info-section li::before {
+    content: "• ";
+    color: #4f46e5;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f4f6;
+    border-top-color: #4f46e5;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 3rem auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .subscription-container {
+        padding: 1rem;
+    }
+
+    .subscription-header h1 {
+        font-size: 2rem;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .countdown-circle {
+        width: 100px;
+        height: 100px;
+    }
+
+    .days-number {
+        font-size: 2rem;
+    }
+}
