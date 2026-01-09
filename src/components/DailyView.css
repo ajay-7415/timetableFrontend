@@ -55,13 +55,16 @@
 .task-item {
     background: rgba(255, 255, 255, 0.03);
     border-radius: var(--radius-lg);
-    padding: var(--spacing-lg);
+    padding: var(--spacing-xl);
+    /* Increased padding */
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all var(--transition-normal);
     cursor: pointer;
     display: flex;
     flex-direction: column;
     gap: var(--spacing-md);
+    min-height: 150px;
+    /* Ensure minimum height for larger look */
 }
 
 .task-item:hover {
@@ -111,9 +114,10 @@
 }
 
 .task-title {
-    font-size: 1.15rem;
+    font-size: 1.4rem;
+    /* Increased from 1.15rem */
     font-weight: 600;
-    margin-bottom: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
     color: var(--color-text-primary);
 }
 
@@ -173,4 +177,137 @@
     .date-controls .form-input {
         width: 100% !important;
     }
+}
+
+/* Large Date Input for Daily View */
+.large-date-input {
+    font-size: 1.5rem !important;
+    padding: 0.5rem 1rem !important;
+    height: auto !important;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--color-text-primary);
+    cursor: pointer;
+}
+
+.large-date-input:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--color-primary);
+    outline: none;
+}
+
+/* Adjust date controls container to align better with larger input */
+.date-controls {
+    align-items: center;
+    gap: var(--spacing-md) !important;
+}
+
+.large-date-input {
+    width: 100% !important;
+    margin: var(--spacing-sm) 0;
+}
+}
+
+/* React Datepicker Customizations */
+.date-picker-wrapper {
+    display: block;
+}
+
+/* Override input styles to match large-date-input */
+.react-datepicker-wrapper .large-date-input {
+    font-size: 1.5rem !important;
+    padding: 0.5rem 1rem !important;
+    height: auto !important;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    text-align: center;
+    width: auto !important;
+    min-width: 200px;
+}
+
+.large-date-input:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--color-primary);
+    outline: none;
+}
+
+/* Custom Popper (Popup) Styles */
+.large-datepicker-popper {
+    z-index: 9999 !important;
+}
+
+.large-datepicker-popper .react-datepicker {
+    font-family: inherit;
+    background: #1e1e2f;
+    /* Dark background matches app theme */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    padding: 1rem;
+    font-size: 1.2rem;
+    /* Larger base font size for the calendar */
+}
+
+/* Header */
+.large-datepicker-popper .react-datepicker__header {
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px 12px 0 0;
+    padding-top: 1rem;
+}
+
+.large-datepicker-popper .react-datepicker__current-month {
+    color: var(--color-text-primary);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.large-datepicker-popper .react-datepicker__day-name {
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+    width: 3rem;
+    line-height: 3rem;
+    margin: 0.2rem;
+}
+
+/* Days */
+.large-datepicker-popper .react-datepicker__day {
+    color: var(--color-text-primary);
+    width: 3rem;
+    line-height: 3rem;
+    margin: 0.2rem;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.large-datepicker-popper .react-datepicker__day:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.large-datepicker-popper .react-datepicker__day--selected,
+.large-datepicker-popper .react-datepicker__day--keyboard-selected {
+    background: var(--color-primary) !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+.large-datepicker-popper .react-datepicker__day--outside-month {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+/* Navigation Arrows */
+.large-datepicker-popper .react-datepicker__navigation {
+    top: 1.2rem;
+}
+
+.large-datepicker-popper .react-datepicker__navigation-icon::before {
+    border-color: var(--color-text-muted);
+    border-width: 3px 3px 0 0;
+    height: 10px;
+    width: 10px;
 }

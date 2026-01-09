@@ -2,15 +2,19 @@ import React, { useState, useEffect, useRef } from 'react';
 import { timetableAPI, trackingAPI } from '../services/api';
 import { DailyViewSkeleton } from './Skeleton';
 import StatsCard from './StatsCard';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 import './DailyView.css';
 
-const DailyView = () => {
-    const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+const DailyView = ({ date, setDate }) => {
+    // const [date, setDate] = useState(new Date().toISOString().split('T')[0]); // Removed internal state
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        loadDailyData();
+        if (date) {
+            loadDailyData();
+        }
     }, [date]);
 
     // Auto-miss tasks that have passed their end time (works even if user was offline)
@@ -184,13 +188,16 @@ const DailyView = () => {
                     <button type="button" className="btn btn-secondary" onClick={() => changeDate(-1)}>
                         ← Previous
                     </button>
-                    <input
-                        type="date"
-                        className="form-input"
-                        value={date}
-                        onChange={(e) => setDate(e.target.value)}
-                        style={{ width: 'auto' }}
-                    />
+                    <div className="custom-datepicker-wrapper">
+                        <DatePicker
+                            selected={new Date(date)}
+                            onChange={(d) => setDate(d.toISOString().split('T')[0])}
+                            dateFormat="yyyy-MM-dd"
+                            className="form-input large-date-input"
+                            wrapperClassName="date-picker-wrapper"
+                            popperClassName="large-datepicker-popper"
+                        />
+                    </div>
                     <button type="button" className="btn btn-secondary" onClick={() => changeDate(1)}>
                         Next →
                     </button>

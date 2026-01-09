@@ -23,7 +23,8 @@ function App() {
     const [subscriptionErrorMessage, setSubscriptionErrorMessage] = useState('');
     const [showLanding, setShowLanding] = useState(true);
 
-    // Check for existing auth on mount
+    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         const user = localStorage.getItem('user');
@@ -128,14 +129,19 @@ function App() {
         setCurrentView('daily');
     };
 
+    const handleDateSelect = (date) => {
+        setSelectedDate(date);
+        setCurrentView('daily');
+    };
+
     const renderView = () => {
         switch (currentView) {
             case 'daily':
-                return <DailyView />;
+                return <DailyView date={selectedDate} setDate={setSelectedDate} />;
             case 'weekly':
                 return <WeeklyView />;
             case 'monthly':
-                return <MonthlyView />;
+                return <MonthlyView selectedDate={selectedDate} onDateSelect={handleDateSelect} />;
             case 'targets':
                 return <TargetManager />;
             case 'audio':
@@ -147,7 +153,7 @@ function App() {
             case 'manage':
                 return <TimetableManager />;
             default:
-                return <DailyView />;
+                return <DailyView date={selectedDate} setDate={setSelectedDate} />;
         }
     };
 

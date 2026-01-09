@@ -6,7 +6,7 @@ import './MonthlyView.css';
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-const MonthlyView = () => {
+const MonthlyView = ({ selectedDate, onDateSelect }) => {
     const today = new Date();
     const [year, setYear] = useState(today.getFullYear());
     const [month, setMonth] = useState(today.getMonth() + 1);
@@ -180,9 +180,11 @@ const MonthlyView = () => {
                                         key={day.date}
                                         className="calendar-day"
                                         style={{
-                                            background: getHeatmapColor(parseFloat(day.completionRate))
+                                            background: getHeatmapColor(parseFloat(day.completionRate)),
+                                            cursor: 'pointer'
                                         }}
                                         title={`${day.date}: ${day.completed}/${day.total} completed (${day.completionRate}%)`}
+                                        onClick={() => onDateSelect && onDateSelect(day.date)}
                                     >
                                         <span className="day-number">{day.day}</span>
                                         {day.total > 0 && (
