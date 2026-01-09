@@ -277,7 +277,7 @@ function SubscriptionManager() {
                     <li>Automatic renewal every month</li>
                     <li>Cancel anytime - no questions asked</li>
                     <li>Instant activation after payment</li>
-                    <li>Email support at support@timetabletracker.com</li>
+                    <li>Email support at ajay7415.mishra@gmail.com</li>
                 </ul>
             </div>
         </div>

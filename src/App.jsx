@@ -6,6 +6,7 @@ import TimetableManager from './components/TimetableManager';
 import TargetManager from './components/TargetManager';
 import AudioPlayer from './components/AudioPlayer';
 import SubscriptionManager from './components/SubscriptionManager';
+import SubscriptionModal from './components/SubscriptionModal';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import { subscriptionAPI } from './services/api';
@@ -17,6 +18,8 @@ function App() {
     const [currentView, setCurrentView] = useState('daily');
     const [isLoading, setIsLoading] = useState(true);
     const [subscriptionData, setSubscriptionData] = useState(null);
+    const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+    const [subscriptionErrorMessage, setSubscriptionErrorMessage] = useState('');
 
     // Check for existing auth on mount
     useEffect(() => {
@@ -35,6 +38,17 @@ function App() {
             fetchSubscriptionStatus();
         }
     }, [isAuthenticated]);
+
+    // Listen for subscription errors
+    useEffect(() => {
+        const handleSubscriptionError = (event) => {
+            setSubscriptionErrorMessage(event.detail.message);
+            setShowSubscriptionModal(true);
+        };
+
+        window.addEventListener('subscriptionError', handleSubscriptionError);
+        return () => window.removeEventListener('subscriptionError', handleSubscriptionError);
+    }, []);
 
     const fetchSubscriptionStatus = async () => {
         try {
@@ -219,6 +233,17 @@ function App() {
                     </div>
                 </main>
             </div>
+
+            {/* Subscription Modal */}
+            <SubscriptionModal
+                isOpen={showSubscriptionModal}
+                message={subscriptionErrorMessage}
+                onClose={() => setShowSubscriptionModal(false)}
+                onSubscribe={() => {
+                    setShowSubscriptionModal(false);
+                    setCurrentView('subscription');
+                }}
+            />
         </div>
     );
 }

@@ -19,6 +19,29 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
+// Handle subscription errors
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        // Check if error is subscription related (403 Forbidden)
+        if (error.response?.status === 403 && error.response?.data?.subscriptionStatus) {
+            const message = error.response.data.message;
+
+            // Store subscription error to show in UI
+            window.dispatchEvent(new CustomEvent('subscriptionError', {
+                detail: {
+                    message,
+                    subscriptionStatus: error.response.data.subscriptionStatus,
+                    trialEndsAt: error.response.data.trialEndsAt,
+                    subscriptionEndsAt: error.response.data.subscriptionEndsAt
+                }
+            }));
+        }
+
+        return Promise.reject(error);
+    }
+);
+
 // Auth API
 export const authAPI = {
     login: (credentials) => api.post('/auth/login', credentials),
