@@ -154,27 +154,21 @@ const DailyView = () => {
     };
 
     const getTaskStatus = (taskId) => {
-        console.log(`🔍 Checking status for task ${taskId}`);
-        console.log('   Available completions:', stats?.completions);
-
-        if (!stats?.completions) {
-            console.log('   ❌ No completions array');
+        if (!stats?.completions || !taskId) {
             return null;
         }
 
-        console.log('   Looking for timetable_id:', taskId);
         const completion = stats.completions.find(c => {
-            console.log('   Comparing with completion:', c);
+            if (!c.timetable_id) return false;
+
             // Handle both populated (object) and non-populated (string) timetable_id
-            const completionTaskId = typeof c.timetable_id === 'object'
+            const completionTaskId = (typeof c.timetable_id === 'object' && c.timetable_id._id)
                 ? c.timetable_id._id
                 : c.timetable_id;
-            console.log('   Extracted ID:', completionTaskId);
-            return completionTaskId.toString() === taskId.toString();
+
+            return completionTaskId && completionTaskId.toString() === taskId.toString();
         });
 
-
-        console.log('   Result:', completion ? `Found: ${completion.status}` : 'Not found');
         return completion;
     };
 
