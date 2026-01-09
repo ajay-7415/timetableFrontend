@@ -208,7 +208,7 @@ const DailyView = () => {
 
             {stats && (
                 <>
-                    <div className="stats-grid grid grid-3 mb-xl">
+                    <div className="stats-row">
                         <StatsCard
                             title="Total Tasks"
                             value={stats.total}

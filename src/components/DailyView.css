@@ -24,6 +24,21 @@
     animation: fadeIn 0.5s ease-out;
 }
 
+/* Force 3 columns for stats to keep them in same line */
+.stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+@media (max-width: 640px) {
+    .stats-row {
+        grid-template-columns: 1fr;
+        /* Stack on very small mobile */
+    }
+}
+
 .tasks-timeline h3 {
     font-size: 1.5rem;
     font-weight: 600;
