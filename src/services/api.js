@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://timelinebackend.onrender.com/api';
+const API_BASE_URL = import.meta.env.DEV
+    ? 'http://localhost:5000/api'
+    : 'https://timelinebackend.onrender.com/api';
 
 const api = axios.create({
     baseURL: API_BASE_URL,
@@ -72,7 +74,8 @@ export const trackingAPI = {
     getDaily: (date) => api.get(`/tracking/daily/${date}`),
     getWeekly: (startDate) => api.get(`/tracking/weekly/${startDate}`),
     getMonthly: (year, month) => api.get(`/tracking/monthly/${year}/${month}`),
-    getHistory: (timetableId) => api.get(`/tracking/history/${timetableId}`)
+    getHistory: (timetableId) => api.get(`/tracking/history/${timetableId}`),
+    getStats: () => api.get('/tracking/stats')
 };
 
 // Audio API

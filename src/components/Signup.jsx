@@ -55,7 +55,12 @@ function Signup({ onNavigateToLogin, onSignupSuccess }) {
 
             <div className="auth-overlay">
                 <div className="auth-content">
+// ...
                     <div className="auth-card">
+                        <button className="top-login-btn" onClick={onNavigateToLogin}>
+                            Login
+                        </button>
+
                         <div className="auth-header">
                             <div className="auth-icon">🚀</div>
                             <h1 className="auth-title">Create Account</h1>

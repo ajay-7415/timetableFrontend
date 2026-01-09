@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { timetableAPI, trackingAPI } from '../services/api';
 import { DailyViewSkeleton } from './Skeleton';
 import StatsCard from './StatsCard';
+import Badges from './Badges'; // Import Badges
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import './DailyView.css';
@@ -9,6 +10,7 @@ import './DailyView.css';
 const DailyView = ({ date, setDate }) => {
     // const [date, setDate] = useState(new Date().toISOString().split('T')[0]); // Removed internal state
     const [stats, setStats] = useState(null);
+    const [gamificationStats, setGamificationStats] = useState(null); // New state for AI features
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -111,10 +113,12 @@ const DailyView = ({ date, setDate }) => {
         setLoading(true);
         try {
             const response = await trackingAPI.getDaily(date);
-            console.log('📊 Daily Data Response:', response.data);
-            console.log('📋 Tasks:', response.data.tasks?.length || 0);
-            console.log('✅ Completions:', response.data.completions);
             setStats(response.data);
+
+            // Fetch Gamification Stats
+            const gamificationResponse = await trackingAPI.getStats();
+            setGamificationStats(gamificationResponse.data);
+
         } catch (error) {
             console.error('Error loading daily data:', error);
         } finally {
@@ -126,9 +130,11 @@ const DailyView = ({ date, setDate }) => {
     const refreshDailyData = async () => {
         try {
             const response = await trackingAPI.getDaily(date);
-            console.log('🔄 Refresh Data:', response.data);
-            console.log('🔄 Completions:', response.data.completions);
             setStats(response.data);
+
+            // Refresh Gamification Stats
+            const gamificationResponse = await trackingAPI.getStats();
+            setGamificationStats(gamificationResponse.data);
         } catch (error) {
             console.error('Error refreshing daily data:', error);
         }
@@ -209,6 +215,27 @@ const DailyView = ({ date, setDate }) => {
 
             {stats && (
                 <>
+                    {/* Gamification Section */}
+                    {gamificationStats && (
+                        <div className="gamification-section mb-xl">
+                            <div className="streak-container flex-between glass-card highlight-card">
+                                <div className="streak-info">
+                                    <span className="streak-icon">🔥</span>
+                                    <div>
+                                        <h3>{gamificationStats.streak} Day Streak</h3>
+                                        <p className="text-muted text-sm">Keep it up!</p>
+                                    </div>
+                                </div>
+                                <div className="missed-info text-right">
+                                    <span className="missed-count">{gamificationStats.totalMissed}</span>
+                                    <p className="text-muted text-sm">Total Missed</p>
+                                </div>
+                            </div>
+
+                            <Badges badges={gamificationStats.badges} />
+                        </div>
+                    )}
+
                     <div className="stats-row">
                         <StatsCard
                             title="Total Tasks"
