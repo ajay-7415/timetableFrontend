@@ -27,7 +27,7 @@
     background: var(--color-bg-primary);
     padding: var(--spacing-lg);
     border-radius: var(--radius-md);
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--glass-border);
     transition: all var(--transition-fast);
     box-shadow: var(--shadow-sm);
 }
@@ -77,7 +77,7 @@
     margin-top: var(--spacing-md);
     line-height: 1.5;
     padding-top: var(--spacing-md);
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid var(--glass-border);
 }
 
 .entry-actions {
@@ -87,7 +87,7 @@
 
 .btn-icon {
     background: var(--color-bg-secondary);
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--glass-border);
     cursor: pointer;
     font-size: 1.1rem;
     padding: 0.5rem 0.75rem;
@@ -117,7 +117,7 @@
     gap: 0.5rem;
     padding: 0.5rem 0.75rem;
     background: var(--color-bg-secondary);
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--glass-border);
     border-radius: var(--radius-sm);
     cursor: pointer;
     transition: all var(--transition-fast);
