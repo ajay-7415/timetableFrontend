@@ -1,11 +1,19 @@
 .badges-container {
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: 0;
+    height: 100%;
+    /* Fill parent height */
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-sm);
+    /* Further reduced container padding */
 }
 
 .section-title {
-    font-size: 1.2rem;
+    font-size: 1rem;
+    /* Reduced from 1.1rem */
     font-weight: 600;
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-xs);
+    /* Reduced margin */
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -13,22 +21,27 @@
 
 .badges-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: var(--spacing-md);
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    /* Maintained smaller min width */
+    gap: var(--spacing-xs);
+    /* Tightest gap */
 }
 
 .badge-item {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    /* Smaller radius */
+    padding: 0.5rem;
+    /* minimal padding */
     text-align: center;
     transition: all 0.3s ease;
     cursor: default;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.1rem;
+    /* Minimal gap */
 }
 
 .badge-item:hover {
@@ -38,21 +51,23 @@
 }
 
 .badge-icon {
-    font-size: 2.5rem;
+    font-size: 1.5rem;
+    /* Reduced significantly from 2.5rem */
     line-height: 1;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.1rem;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .badge-info {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0;
 }
 
 .badge-name {
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    /* Smaller text */
     color: var(--color-text-primary);
 }
 

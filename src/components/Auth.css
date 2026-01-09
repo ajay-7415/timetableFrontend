@@ -34,8 +34,8 @@
 /* Auth Content - Centered Single Column */
 .auth-content {
     width: 100%;
-    max-width: 450px;
-    /* Slightly narrower */
+    max-width: 520px;
+    /* Increased from 450px */
     position: relative;
     z-index: 20;
     margin: auto;
@@ -48,10 +48,10 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    /* Slightly smaller radius */
-    padding: 2rem;
-    /* Reduced padding from 2.5rem */
+    border-radius: 24px;
+    /* Increased radius */
+    padding: 3rem;
+    /* Increased padding from 2rem */
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
     animation: fadeUp 0.6s ease-out;
 }

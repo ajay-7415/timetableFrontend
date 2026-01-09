@@ -29,6 +29,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: var(--spacing-md);
+    margin-top: 10px;
     margin-bottom: var(--spacing-xl);
 }
 
@@ -316,10 +317,29 @@
 /* Gamification Section Styles */
 .gamification-section {
     animation: fadeIn 0.5s ease-out;
+    display: flex;
+    gap: var(--spacing-lg);
+    align-items: stretch;
+    /* Stretch children to equal height */
+}
+
+/* Ensure children take available space */
+.streak-container {
+    flex: 1;
+    min-width: 300px;
+    /* Prevent it from getting too small */
+}
+
+.badges-container {
+    flex: 2;
+    /* Give more space to badges if needed */
+    margin-bottom: 0;
+    /* Remove bottom margin if it was set */
 }
 
 .streak-container {
-    padding: var(--spacing-lg) var(--spacing-xl);
+    padding: var(--spacing-sm) var(--spacing-md);
+    /* Further reduced padding */
     align-items: center;
     background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
     border: 1px solid rgba(255, 107, 107, 0.2);
@@ -332,28 +352,34 @@
 .streak-info {
     display: flex;
     align-items: center;
-    gap: var(--spacing-lg);
+    gap: var(--spacing-md);
+    /* Reduced gap */
 }
 
 .streak-icon {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
+    /* Reduced from 2.5rem */
     animation: pulse 2s infinite;
 }
 
 .streak-info h3 {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+    /* Reduced from 1.5rem */
     font-weight: 700;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.1rem;
     background: linear-gradient(45deg, #FF6B6B, #FFD93D);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    line-height: 1.2;
 }
 
 .missed-count {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+    /* Reduced from 1.5rem */
     font-weight: 700;
     color: var(--color-error);
+    line-height: 1.2;
 }
 
 @keyframes pulse {
