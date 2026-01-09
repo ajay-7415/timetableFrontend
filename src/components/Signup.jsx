@@ -74,7 +74,7 @@ function Signup({ onNavigateToLogin, onSignupSuccess }) {
                                     id="name"
                                     name="name"
                                     className="form-input auth-input"
-                                    placeholder="Aja Mishra"
+                                    placeholder="YOUR NAME"
                                     value={formData.name}
                                     onChange={handleChange}
                                     required
@@ -91,7 +91,7 @@ function Signup({ onNavigateToLogin, onSignupSuccess }) {
                                     id="email"
                                     name="email"
                                     className="form-input auth-input"
-                                    placeholder="aja.mishra@example.com"
+                                    placeholder="your.email@example.com"
                                     value={formData.email}
                                     onChange={handleChange}
                                     required

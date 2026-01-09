@@ -38,7 +38,7 @@ function Login({ onNavigateToSignup, onLoginSuccess }) {
                 <div className="auth-card fade-in">
                     <div className="auth-header">
                         <div className="auth-icon">📅</div>
-                        <h1 className="auth-title">Welcome Ajay Mishra</h1>
+                        <h1 className="auth-title">Welcome</h1>
                         <p className="auth-subtitle">to Timetable App</p>
                         <p className="auth-description">Track your schedule, achieve your goals</p>
                     </div>
@@ -52,7 +52,7 @@ function Login({ onNavigateToSignup, onLoginSuccess }) {
                                     type="email"
                                     id="email"
                                     className="form-input auth-input"
-                                    placeholder="aja.mishra@example.com"
+                                    placeholder="example@example.com"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
