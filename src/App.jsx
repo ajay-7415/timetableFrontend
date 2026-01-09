@@ -7,6 +7,7 @@ import TargetManager from './components/TargetManager';
 import AudioPlayer from './components/AudioPlayer';
 import SubscriptionManager from './components/SubscriptionManager';
 import SubscriptionModal from './components/SubscriptionModal';
+import LandingPage from './components/LandingPage';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import { subscriptionAPI } from './services/api';
@@ -20,6 +21,7 @@ function App() {
     const [subscriptionData, setSubscriptionData] = useState(null);
     const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
     const [subscriptionErrorMessage, setSubscriptionErrorMessage] = useState('');
+    const [showLanding, setShowLanding] = useState(true);
 
     // Check for existing auth on mount
     useEffect(() => {
@@ -28,6 +30,7 @@ function App() {
 
         if (token && user) {
             setIsAuthenticated(true);
+            setShowLanding(false);
         }
         setIsLoading(false);
     }, []);
@@ -62,18 +65,32 @@ function App() {
     // Auth handlers
     const handleLoginSuccess = () => {
         setIsAuthenticated(true);
+        setShowLanding(false);
     };
 
     const handleSignupSuccess = () => {
         setIsAuthenticated(true);
+        setShowLanding(false);
     };
 
     const handleNavigateToSignup = () => {
         setAuthView('signup');
+        setShowLanding(false);
     };
 
     const handleNavigateToLogin = () => {
         setAuthView('login');
+        setShowLanding(false);
+    };
+
+    const handleGetStarted = () => {
+        setAuthView('signup');
+        setShowLanding(false);
+    };
+
+    const handleLandingLogin = () => {
+        setAuthView('login');
+        setShowLanding(false);
     };
 
     // Show loading while checking auth
@@ -91,8 +108,11 @@ function App() {
         );
     }
 
-    // If not authenticated, show auth pages
+    // If not authenticated, show landing or auth pages
     if (!isAuthenticated) {
+        if (showLanding) {
+            return <LandingPage onGetStarted={handleGetStarted} onLogin={handleLandingLogin} />;
+        }
         if (authView === 'login') {
             return <Login onNavigateToSignup={handleNavigateToSignup} onLoginSuccess={handleLoginSuccess} />;
         } else {
