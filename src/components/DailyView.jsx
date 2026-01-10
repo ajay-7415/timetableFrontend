@@ -5,9 +5,10 @@ import StatsCard from './StatsCard';
 import Badges from './Badges'; // Import Badges
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import FocusTimer from './FocusTimer'; // Import FocusTimer
 import './DailyView.css';
 
-const DailyView = ({ date, setDate }) => {
+const DailyView = ({ date, setDate, isFocusMode, toggleFocusMode }) => {
     // const [date, setDate] = useState(new Date().toISOString().split('T')[0]); // Removed internal state
     const [stats, setStats] = useState(null);
     const [gamificationStats, setGamificationStats] = useState(null); // New state for AI features
@@ -187,8 +188,25 @@ const DailyView = ({ date, setDate }) => {
     }
 
     return (
-        <div className="daily-view">
-            <div className="view-header">
+        <div className={`daily-view ${isFocusMode ? 'focus-view' : ''}`}>
+
+            {/* Focus Mode Toggle Button */}
+            {toggleFocusMode && (
+                <button
+                    className={`focus-mode-toggle ${isFocusMode ? 'active' : ''}`}
+                    onClick={toggleFocusMode}
+                    title={isFocusMode ? "Exit Focus Mode" : "Enter Focus Mode"}
+                >
+                    {isFocusMode ? "Exit Focus Mode ✖" : "Focus Mode ⚡"}
+                </button>
+            )}
+
+            {/* Focus Timer Section - Only visible in Focus Mode */}
+            {isFocusMode && stats?.tasks && (
+                <FocusTimer tasks={stats.tasks} />
+            )}
+
+            <div className={`view-header ${isFocusMode ? 'hidden' : ''}`}>
                 <h2>Daily View</h2>
                 <div className="date-controls flex gap-md">
                     <button type="button" className="btn btn-secondary" onClick={() => changeDate(-1)}>
@@ -215,8 +233,8 @@ const DailyView = ({ date, setDate }) => {
 
             {stats && (
                 <>
-                    {/* Gamification Section */}
-                    {gamificationStats && (
+                    {/* Gamification Section - Hidden in Focus Mode */}
+                    {!isFocusMode && gamificationStats && (
                         <div className="gamification-section mb-xl">
                             <div className="streak-container flex-between glass-card highlight-card">
                                 <div className="streak-info">
@@ -236,29 +254,33 @@ const DailyView = ({ date, setDate }) => {
                         </div>
                     )}
 
-                    <div className="stats-row">
-                        <StatsCard
-                            title="Total Tasks"
-                            value={stats.total}
-                            icon="📋"
-                            gradient="primary"
-                        />
-                        <StatsCard
-                            title="Completed"
-                            value={stats.completed}
-                            subtitle={`${stats.completionRate}% completion rate`}
-                            icon="✅"
-                            gradient="success"
-                        />
-                        <StatsCard
-                            title="Missed"
-                            value={stats.missed}
-                            icon="❌"
-                            gradient="error"
-                        />
-                    </div>
+                    {/* Stats Row - Hidden in Focus Mode */}
+                    {!isFocusMode && (
+                        <div className="stats-row">
+                            <StatsCard
+                                title="Total Tasks"
+                                value={stats.total}
+                                icon="📋"
+                                gradient="primary"
+                            />
+                            <StatsCard
+                                title="Completed"
+                                value={stats.completed}
+                                subtitle={`${stats.completionRate}% completion rate`}
+                                icon="✅"
+                                gradient="success"
+                            />
+                            <StatsCard
+                                title="Missed"
+                                value={stats.missed}
+                                icon="❌"
+                                gradient="error"
+                            />
+                        </div>
+                    )}
 
-                    {stats.total > 0 && (
+                    {/* Progress Bar - Hidden in Focus Mode */}
+                    {!isFocusMode && stats.total > 0 && (
                         <div className="glass-card mb-lg">
                             <h3 className="mb-md">Progress</h3>
                             <div className="progress-bar">
@@ -274,62 +296,65 @@ const DailyView = ({ date, setDate }) => {
                         </div>
                     )}
 
-                    <div className="tasks-timeline glass-card">
-                        <h3 className="mb-lg">Today's Schedule</h3>
-                        {stats.tasks && stats.tasks.length > 0 ? (
-                            <div className="timeline">
-                                {stats.tasks
-                                    .sort((a, b) => a.start_time.localeCompare(b.start_time))
-                                    .map((task) => {
-                                        const status = getTaskStatus(task._id);
-                                        return (
-                                            <div
-                                                key={task._id}
-                                                className={`task-item ${status?.status || 'pending'}`}
-                                            >
-                                                <div className="task-time">
-                                                    <span className="time-start">{task.start_time}</span>
-                                                    <span className="time-separator">-</span>
-                                                    <span className="time-end">{task.end_time}</span>
+                    {/* Timeline - Hidden in Focus Mode */}
+                    {!isFocusMode && (
+                        <div className="tasks-timeline glass-card">
+                            <h3 className="mb-lg">Today's Schedule</h3>
+                            {stats.tasks && stats.tasks.length > 0 ? (
+                                <div className="timeline">
+                                    {stats.tasks
+                                        .sort((a, b) => a.start_time.localeCompare(b.start_time))
+                                        .map((task) => {
+                                            const status = getTaskStatus(task._id);
+                                            return (
+                                                <div
+                                                    key={task._id}
+                                                    className={`task-item ${status?.status || 'pending'}`}
+                                                >
+                                                    <div className="task-time">
+                                                        <span className="time-start">{task.start_time}</span>
+                                                        <span className="time-separator">-</span>
+                                                        <span className="time-end">{task.end_time}</span>
+                                                    </div>
+                                                    <div className="task-content">
+                                                        <h4 className="task-title">{task.title}</h4>
+                                                        {task.description && (
+                                                            <p className="task-description">{task.description}</p>
+                                                        )}
+                                                    </div>
+                                                    <div className="task-actions">
+                                                        {status?.status === 'completed' ? (
+                                                            <span className="badge badge-success">✓ Completed</span>
+                                                        ) : status?.status === 'missed' ? (
+                                                            <span className="badge badge-error">✗ Missed</span>
+                                                        ) : (
+                                                            <>
+                                                                <button
+                                                                    type="button"
+                                                                    className="btn btn-success btn-sm"
+                                                                    onClick={(e) => markTask(e, task._id, 'completed')}
+                                                                >
+                                                                    ✓ Complete
+                                                                </button>
+                                                                <button
+                                                                    type="button"
+                                                                    className="btn btn-error btn-sm"
+                                                                    onClick={(e) => markTask(e, task._id, 'missed')}
+                                                                >
+                                                                    ✗ Miss
+                                                                </button>
+                                                            </>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                                <div className="task-content">
-                                                    <h4 className="task-title">{task.title}</h4>
-                                                    {task.description && (
-                                                        <p className="task-description">{task.description}</p>
-                                                    )}
-                                                </div>
-                                                <div className="task-actions">
-                                                    {status?.status === 'completed' ? (
-                                                        <span className="badge badge-success">✓ Completed</span>
-                                                    ) : status?.status === 'missed' ? (
-                                                        <span className="badge badge-error">✗ Missed</span>
-                                                    ) : (
-                                                        <>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-success btn-sm"
-                                                                onClick={(e) => markTask(e, task._id, 'completed')}
-                                                            >
-                                                                ✓ Complete
-                                                            </button>
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-error btn-sm"
-                                                                onClick={(e) => markTask(e, task._id, 'missed')}
-                                                            >
-                                                                ✗ Miss
-                                                            </button>
-                                                        </>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                            </div>
-                        ) : (
-                            <p className="text-muted text-center">No tasks scheduled for this day</p>
-                        )}
-                    </div>
+                                            );
+                                        })}
+                                </div>
+                            ) : (
+                                <p className="text-muted text-center">No tasks scheduled for this day</p>
+                            )}
+                        </div>
+                    )}
                 </>
             )}
         </div>

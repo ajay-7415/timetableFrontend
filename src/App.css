@@ -242,3 +242,21 @@
         padding: var(--spacing-md);
     }
 }
+
+/* Focus Mode Global Styles */
+.focus-mode .app-layout {
+    height: 100vh;
+    /* Full height without header */
+}
+
+.focus-mode-main {
+    width: 100%;
+    margin: 0 auto;
+    max-width: 900px;
+    /* Constrain width for better readability */
+}
+
+.focus-mode-main .main-content {
+    padding-top: var(--spacing-2xl);
+    padding-bottom: var(--spacing-2xl);
+}

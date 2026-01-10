@@ -412,3 +412,63 @@
         text-align: center;
     }
 }
+
+/* Focus Mode Toggle */
+.focus-mode-toggle {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 99999;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 99px;
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+}
+
+.focus-mode-toggle:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.6);
+}
+
+.focus-mode-toggle.active {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--color-text-primary);
+}
+
+.focus-view .view-header h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-xl);
+}
+
+.focus-view .date-controls {
+    justify-content: center;
+    margin-bottom: var(--spacing-2xl);
+}
+
+.focus-view .timeline {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.focus-view .task-item {
+    padding: var(--spacing-2xl);
+    /* More breathing room */
+    /* More breathing room */
+    margin-bottom: var(--spacing-lg);
+}
+
+.view-header.hidden {
+    display: none;
+}

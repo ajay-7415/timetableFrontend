@@ -22,6 +22,7 @@ function App() {
     const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
     const [subscriptionErrorMessage, setSubscriptionErrorMessage] = useState('');
     const [showLanding, setShowLanding] = useState(true);
+    const [isFocusMode, setIsFocusMode] = useState(false);
 
     const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
 
@@ -134,10 +135,19 @@ function App() {
         setCurrentView('daily');
     };
 
+    const toggleFocusMode = () => {
+        setIsFocusMode(!isFocusMode);
+    };
+
     const renderView = () => {
         switch (currentView) {
             case 'daily':
-                return <DailyView date={selectedDate} setDate={setSelectedDate} />;
+                return <DailyView
+                    date={selectedDate}
+                    setDate={setSelectedDate}
+                    isFocusMode={isFocusMode}
+                    toggleFocusMode={toggleFocusMode}
+                />;
             case 'weekly':
                 return <WeeklyView />;
             case 'monthly':
@@ -153,107 +163,116 @@ function App() {
             case 'manage':
                 return <TimetableManager />;
             default:
-                return <DailyView date={selectedDate} setDate={setSelectedDate} />;
+                return <DailyView
+                    date={selectedDate}
+                    setDate={setSelectedDate}
+                    isFocusMode={isFocusMode} // Pass props to default case
+                    toggleFocusMode={toggleFocusMode}
+                />;
         }
     };
 
     return (
-        <div className="app">
-            <header className="app-header">
-                <div className="container">
-                    <div className="logo">
-                        <h1>📅 Timetable Tracker</h1>
-                        <p className="tagline">Track your schedule, achieve your goals</p>
+        <div className={`app ${isFocusMode ? 'focus-mode' : ''}`}>
+            {!isFocusMode && (
+                <header className="app-header">
+                    <div className="container">
+                        <div className="logo">
+                            <h1>📅 Timetable Tracker</h1>
+                            <p className="tagline">Track your schedule, achieve your goals</p>
+                        </div>
+                        <div className="user-profile">
+                            <span className="user-greeting">Hello, {JSON.parse(localStorage.getItem('user'))?.name || 'User'}</span>
+                            {subscriptionData?.trial?.isTrialActive && subscriptionData?.trial?.daysRemaining > 0 && (
+                                <span className="trial-badge">
+                                    🆓 Trial: {subscriptionData.trial.daysRemaining} days left
+                                </span>
+                            )}
+                        </div>
                     </div>
-                    <div className="user-profile">
-                        <span className="user-greeting">Hello, {JSON.parse(localStorage.getItem('user'))?.name || 'User'}</span>
-                        {subscriptionData?.trial?.isTrialActive && subscriptionData?.trial?.daysRemaining > 0 && (
-                            <span className="trial-badge">
-                                🆓 Trial: {subscriptionData.trial.daysRemaining} days left
-                            </span>
-                        )}
-                    </div>
-                </div>
-            </header>
+                </header>
+            )}
 
             <div className="app-layout">
                 {/* Sidebar Navigation */}
-                <aside className="app-sidebar">
-                    <nav className="sidebar-nav">
-                        <button
-                            className={`sidebar-tab ${currentView === 'daily' ? 'active' : ''}`}
-                            onClick={() => setCurrentView('daily')}
-                        >
-                            <span className="tab-icon">📊</span>
-                            <span className="tab-label">Daily View</span>
-                        </button>
-                        <button
-                            className={`sidebar-tab ${currentView === 'weekly' ? 'active' : ''}`}
-                            onClick={() => setCurrentView('weekly')}
-                        >
-                            <span className="tab-icon">📈</span>
-                            <span className="tab-label">Weekly View</span>
-                        </button>
-                        <button
-                            className={`sidebar-tab ${currentView === 'monthly' ? 'active' : ''}`}
-                            onClick={() => setCurrentView('monthly')}
-                        >
-                            <span className="tab-icon">📆</span>
-                            <span className="tab-label">Monthly View</span>
-                        </button>
-                        <button
-                            className={`sidebar-tab ${currentView === 'targets' ? 'active' : ''}`}
-                            onClick={() => setCurrentView('targets')}
-                        >
-                            <span className="tab-icon">🎯</span>
-                            <span className="tab-label">Targets</span>
-                        </button>
-                        <button
-                            className={`sidebar-tab ${currentView === 'audio' ? 'active' : ''}`}
-                            onClick={() => setCurrentView('audio')}
-                        >
-                            <span className="tab-icon">🎵</span>
-                            <span className="tab-label">Audio Player</span>
-                        </button>
-                        <button
-                            className={`sidebar-tab ${currentView === 'subscription' ? 'active' : ''}`}
-                            onClick={() => setCurrentView('subscription')}
-                        >
-                            <span className="tab-icon">💎</span>
-                            <span className="tab-label">Subscription</span>
-                        </button>
+                {!isFocusMode && (
+                    <aside className="app-sidebar">
+                        <nav className="sidebar-nav">
+                            <button
+                                className={`sidebar-tab ${currentView === 'daily' ? 'active' : ''}`}
+                                onClick={() => setCurrentView('daily')}
+                            >
+                                <span className="tab-icon">📊</span>
+                                <span className="tab-label">Daily View</span>
+                            </button>
+                            <button
+                                className={`sidebar-tab ${currentView === 'weekly' ? 'active' : ''}`}
+                                onClick={() => setCurrentView('weekly')}
+                            >
+                                <span className="tab-icon">📈</span>
+                                <span className="tab-label">Weekly View</span>
+                            </button>
+                            <button
+                                className={`sidebar-tab ${currentView === 'monthly' ? 'active' : ''}`}
+                                onClick={() => setCurrentView('monthly')}
+                            >
+                                <span className="tab-icon">📆</span>
+                                <span className="tab-label">Monthly View</span>
+                            </button>
+                            <button
+                                className={`sidebar-tab ${currentView === 'targets' ? 'active' : ''}`}
+                                onClick={() => setCurrentView('targets')}
+                            >
+                                <span className="tab-icon">🎯</span>
+                                <span className="tab-label">Targets</span>
+                            </button>
+                            <button
+                                className={`sidebar-tab ${currentView === 'audio' ? 'active' : ''}`}
+                                onClick={() => setCurrentView('audio')}
+                            >
+                                <span className="tab-icon">🎵</span>
+                                <span className="tab-label">Audio Player</span>
+                            </button>
+                            <button
+                                className={`sidebar-tab ${currentView === 'subscription' ? 'active' : ''}`}
+                                onClick={() => setCurrentView('subscription')}
+                            >
+                                <span className="tab-icon">💎</span>
+                                <span className="tab-label">Subscription</span>
+                            </button>
 
-                        <div className="sidebar-divider"></div>
+                            <div className="sidebar-divider"></div>
 
-                        <button
-                            className={`sidebar-tab ${currentView === 'create' ? 'active' : ''}`}
-                            onClick={() => setCurrentView('create')}
-                        >
-                            <span className="tab-icon">➕</span>
-                            <span className="tab-label">Create Timetable</span>
-                        </button>
-                        <button
-                            className={`sidebar-tab ${currentView === 'manage' ? 'active' : ''}`}
-                            onClick={() => setCurrentView('manage')}
-                        >
-                            <span className="tab-icon">⚙️</span>
-                            <span className="tab-label">Manage Schedule</span>
-                        </button>
+                            <button
+                                className={`sidebar-tab ${currentView === 'create' ? 'active' : ''}`}
+                                onClick={() => setCurrentView('create')}
+                            >
+                                <span className="tab-icon">➕</span>
+                                <span className="tab-label">Create Timetable</span>
+                            </button>
+                            <button
+                                className={`sidebar-tab ${currentView === 'manage' ? 'active' : ''}`}
+                                onClick={() => setCurrentView('manage')}
+                            >
+                                <span className="tab-icon">⚙️</span>
+                                <span className="tab-label">Manage Schedule</span>
+                            </button>
 
-                        <div className="sidebar-divider"></div>
+                            <div className="sidebar-divider"></div>
 
-                        <button
-                            className="sidebar-tab logout-tab"
-                            onClick={handleLogout}
-                        >
-                            <span className="tab-icon">🚪</span>
-                            <span className="tab-label">Logout</span>
-                        </button>
-                    </nav>
-                </aside>
+                            <button
+                                className="sidebar-tab logout-tab"
+                                onClick={handleLogout}
+                            >
+                                <span className="tab-icon">🚪</span>
+                                <span className="tab-label">Logout</span>
+                            </button>
+                        </nav>
+                    </aside>
+                )}
 
                 {/* Main Content Area */}
-                <main className="app-main">
+                <main className={`app-main ${isFocusMode ? 'focus-mode-main' : ''}`}>
                     <div className="main-content">
                         {renderView()}
                     </div>
