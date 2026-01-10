@@ -10,12 +10,35 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     margin-bottom: 2rem;
     animation: fadeIn 0.5s ease-out;
+    transition: all 0.5s ease-in-out;
 }
 
 .focus-timer-container.empty {
     padding: 3rem;
     text-align: center;
     color: var(--color-text-muted);
+}
+
+/* Study Mode Styles */
+.focus-timer-container.mode-study {
+    background: rgba(14, 165, 233, 0.1);
+    border-color: rgba(14, 165, 233, 0.3);
+    box-shadow: 0 0 30px rgba(14, 165, 233, 0.1);
+}
+
+.focus-timer-container.mode-study .timer-circle {
+    animation: breathing-glow 4s infinite ease-in-out;
+}
+
+/* Exercise Mode Styles */
+.focus-timer-container.mode-exercise {
+    background: rgba(244, 63, 94, 0.1);
+    border-color: rgba(244, 63, 94, 0.3);
+    box-shadow: 0 0 30px rgba(244, 63, 94, 0.1);
+}
+
+.focus-timer-container.mode-exercise .timer-circle {
+    animation: heartbeat 1.5s infinite ease-in-out;
 }
 
 .timer-circle {
@@ -26,11 +49,19 @@
 }
 
 .progress-ring__circle {
-    transition: stroke-dashoffset 0.5s ease-in-out;
+    transition: stroke-dashoffset 0.5s ease-in-out, stroke 0.5s ease;
     transform: rotate(-90deg);
     transform-origin: 50% 50%;
     stroke-linecap: round;
     filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5));
+}
+
+.mode-study .progress-ring__circle {
+    filter: drop-shadow(0 0 15px rgba(14, 165, 233, 0.6));
+}
+
+.mode-exercise .progress-ring__circle {
+    filter: drop-shadow(0 0 15px rgba(244, 63, 94, 0.6));
 }
 
 .timer-content {
@@ -39,6 +70,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
+    width: 100%;
 }
 
 .time-remaining {
@@ -57,6 +89,25 @@
     margin-top: 5px;
 }
 
+.focus-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-top: 8px;
+    text-transform: uppercase;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.mode-study .focus-label {
+    color: #38bdf8;
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+.mode-exercise .focus-label {
+    color: #fb7185;
+    text-shadow: 0 0 10px rgba(251, 113, 133, 0.5);
+}
+
 .current-task-info {
     text-align: center;
     max-width: 400px;
@@ -69,6 +120,17 @@
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    transition: all 0.5s ease;
+}
+
+.mode-study .current-task-info h2 {
+    background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+    -webkit-background-clip: text;
+}
+
+.mode-exercise .current-task-info h2 {
+    background: linear-gradient(135deg, #fb7185 0%, #e11d48 100%);
+    -webkit-background-clip: text;
 }
 
 .current-task-info p {
@@ -85,4 +147,45 @@
     font-weight: 600;
     font-family: monospace;
     color: var(--color-text-primary);
+}
+
+@keyframes breathing-glow {
+
+    0%,
+    100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 15px rgba(14, 165, 233, 0.3));
+    }
+
+    50% {
+        transform: scale(1.02);
+        filter: drop-shadow(0 0 25px rgba(14, 165, 233, 0.6));
+    }
+}
+
+@keyframes heartbeat {
+    0% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px rgba(244, 63, 94, 0.3));
+    }
+
+    14% {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 20px rgba(244, 63, 94, 0.6));
+    }
+
+    28% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px rgba(244, 63, 94, 0.3));
+    }
+
+    42% {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 20px rgba(244, 63, 94, 0.6));
+    }
+
+    70% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px rgba(244, 63, 94, 0.3));
+    }
 }

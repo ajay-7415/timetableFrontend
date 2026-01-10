@@ -57,12 +57,30 @@ const FocusTimer = ({ tasks }) => {
         );
     }
 
+    const getTaskMode = (title) => {
+        if (!title) return 'default';
+        const lowerTitle = title.toLowerCase();
+        if (lowerTitle.includes('study') || lowerTitle.includes('read') || lowerTitle.includes('learn')) return 'study';
+        if (lowerTitle.includes('exercise') || lowerTitle.includes('workout') || lowerTitle.includes('gym') || lowerTitle.includes('run')) return 'exercise';
+        return 'default';
+    };
+
+    const taskMode = currentTask ? getTaskMode(currentTask.title) : 'default';
+
+    const getModeColor = (mode) => {
+        switch (mode) {
+            case 'study': return '#0ea5e9'; // Cyan/Blue
+            case 'exercise': return '#f43f5e'; // Rose/Red
+            default: return 'var(--color-primary)';
+        }
+    };
+
     const radius = 80;
     const circumference = 2 * Math.PI * radius;
     const strokeDashoffset = circumference - (progress / 100) * circumference;
 
     return (
-        <div className="focus-timer-container">
+        <div className={`focus-timer-container ${taskMode !== 'default' ? `mode-${taskMode}` : ''}`}>
             <div className="timer-circle">
                 <svg width="200" height="200" className="progress-ring">
                     <circle
@@ -76,7 +94,7 @@ const FocusTimer = ({ tasks }) => {
                     />
                     <circle
                         className="progress-ring__circle"
-                        stroke="var(--color-primary)"
+                        stroke={getModeColor(taskMode)}
                         strokeWidth="12"
                         fill="transparent"
                         r={radius}
@@ -91,6 +109,10 @@ const FocusTimer = ({ tasks }) => {
                 <div className="timer-content">
                     <div className="time-remaining">{timeLeft}m</div>
                     <div className="time-label">REMAINING</div>
+                    <div className="focus-label">
+                        {taskMode === 'study' && '🧠 DEEP FOCUS'}
+                        {taskMode === 'exercise' && '⚡ POWER UP'}
+                    </div>
                 </div>
             </div>
             <div className="current-task-info">
