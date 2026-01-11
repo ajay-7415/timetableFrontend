@@ -23,7 +23,7 @@ function SubscriptionModal({ isOpen, onClose, message, onSubscribe }) {
                 </div>
 
                 <div className="modal-pricing">
-                    <span className="price">₹50</span>
+                    <span className="price">₹200</span>
                     <span className="period">/month</span>
                 </div>
 

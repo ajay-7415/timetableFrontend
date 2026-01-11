@@ -229,7 +229,7 @@ function SubscriptionManager() {
                     <h2>Subscription Plan</h2>
                     <div className="price">
                         <span className="currency">₹</span>
-                        <span className="amount">50</span>
+                        <span className="amount">200</span>
                         <span className="period">/month</span>
                     </div>
                 </div>
